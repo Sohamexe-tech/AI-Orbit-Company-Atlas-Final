@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+
 import { CompanyExplorer } from "@/components/companies/company-explorer";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "AI Companies | AI Orbit",
@@ -16,8 +19,12 @@ export default async function CompaniesPage() {
     }),
     prisma.company.findMany({
       distinct: ["industry"],
-      select: { industry: true },
-      orderBy: { industry: "asc" },
+      select: {
+        industry: true,
+      },
+      orderBy: {
+        industry: "asc",
+      },
     }),
   ]);
 
