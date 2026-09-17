@@ -9,19 +9,22 @@ import { Button } from "@/components/ui/button";
 
 type Company = {
   id: string;
+  createdAt: Date;
+  updatedAt: Date;
   slug: string;
   name: string;
   tagline: string;
   description: string;
   industry: string;
   location: string;
-  logoUrl: string | null;
+  logoUrl: string;
   websiteUrl: string;
   linkedinUrl: string | null;
   githubUrl: string | null;
   foundedYear: number | null;
   fundingStage: string | null;
   companySize: string | null;
+  employeeCount: number | null;
   featured: boolean;
   verified: boolean;
 };
@@ -77,6 +80,7 @@ export function CompanyExplorer({
         }
 
         const data = await response.json();
+
         setItems(data.companies ?? data ?? []);
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") {
@@ -104,13 +108,17 @@ export function CompanyExplorer({
     setSort("featured");
   }
 
-  const hasFilters = Boolean(query || industry || sort !== "featured");
+  const hasFilters = Boolean(
+    query || industry || sort !== "featured"
+  );
 
   return (
     <Container className="py-12">
       <div className="flex flex-col gap-8">
         <div>
-          <p className="eyebrow text-accent-fg">Company directory</p>
+          <p className="eyebrow text-accent-fg">
+            Company directory
+          </p>
 
           <h1 className="mt-3 text-4xl font-black tracking-[-0.04em] md:text-6xl">
             Explore AI companies
@@ -130,7 +138,9 @@ export function CompanyExplorer({
               <input
                 type="search"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) =>
+                  setQuery(event.target.value)
+                }
                 placeholder="Search companies..."
                 className="h-11 w-full rounded-control border border-border bg-bg px-10 text-sm outline-none placeholder:text-fg-subtle focus:border-accent"
               />
@@ -138,7 +148,9 @@ export function CompanyExplorer({
 
             <select
               value={industry}
-              onChange={(event) => setIndustry(event.target.value)}
+              onChange={(event) =>
+                setIndustry(event.target.value)
+              }
               className="h-11 rounded-control border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
             >
               <option value="">All industries</option>
@@ -152,7 +164,9 @@ export function CompanyExplorer({
 
             <select
               value={sort}
-              onChange={(event) => setSort(event.target.value)}
+              onChange={(event) =>
+                setSort(event.target.value)
+              }
               className="h-11 rounded-control border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
             >
               <option value="featured">Featured</option>
@@ -162,7 +176,6 @@ export function CompanyExplorer({
 
             <Button
               type="button"
-              variant="outline"
               onClick={clearFilters}
               disabled={!hasFilters}
               className="h-11"
@@ -223,7 +236,9 @@ export function CompanyExplorer({
           </div>
         ) : error ? (
           <div className="rounded-panel border border-border bg-card p-8 text-center">
-            <p className="eyebrow text-accent-fg">Directory error</p>
+            <p className="eyebrow text-accent-fg">
+              Directory error
+            </p>
 
             <h2 className="mt-3 text-xl font-bold">
               We couldn&apos;t load the directory.
@@ -236,14 +251,18 @@ export function CompanyExplorer({
             <Button
               type="button"
               className="mt-5"
-              onClick={() => setRetryKey((value) => value + 1)}
+              onClick={() =>
+                setRetryKey((value) => value + 1)
+              }
             >
               Try again
             </Button>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="rounded-panel border border-border bg-card p-8 text-center">
-            <p className="eyebrow text-fg-subtle">No results</p>
+            <p className="eyebrow text-fg-subtle">
+              No results
+            </p>
 
             <h2 className="mt-3 text-xl font-bold">
               No companies found
@@ -255,7 +274,6 @@ export function CompanyExplorer({
 
             <Button
               type="button"
-              variant="outline"
               className="mt-5"
               onClick={clearFilters}
             >
@@ -265,7 +283,10 @@ export function CompanyExplorer({
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((company) => (
-              <CompanyCard key={company.id} company={company} />
+              <CompanyCard
+                key={company.id}
+                company={company}
+              />
             ))}
           </div>
         )}
